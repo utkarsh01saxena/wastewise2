@@ -14,16 +14,259 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      households: {
+        Row: {
+          compliance_score: number | null
+          created_at: string
+          family_size: number | null
+          flat_number: string
+          floor_number: number | null
+          id: string
+          resident_id: string
+          society_id: string
+          total_points: number | null
+          updated_at: string
+          wing: string | null
+        }
+        Insert: {
+          compliance_score?: number | null
+          created_at?: string
+          family_size?: number | null
+          flat_number: string
+          floor_number?: number | null
+          id?: string
+          resident_id: string
+          society_id: string
+          total_points?: number | null
+          updated_at?: string
+          wing?: string | null
+        }
+        Update: {
+          compliance_score?: number | null
+          created_at?: string
+          family_size?: number | null
+          flat_number?: string
+          floor_number?: number | null
+          id?: string
+          resident_id?: string
+          society_id?: string
+          total_points?: number | null
+          updated_at?: string
+          wing?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "households_resident_id_fkey"
+            columns: ["resident_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "households_society_id_fkey"
+            columns: ["society_id"]
+            isOneToOne: false
+            referencedRelation: "societies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          society_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          society_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          society_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_society_id_fkey"
+            columns: ["society_id"]
+            isOneToOne: false
+            referencedRelation: "societies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      smart_bins: {
+        Row: {
+          bin_code: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_maintenance: string | null
+          latitude: number | null
+          location_description: string
+          longitude: number | null
+          society_id: string
+          updated_at: string
+        }
+        Insert: {
+          bin_code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_maintenance?: string | null
+          latitude?: number | null
+          location_description: string
+          longitude?: number | null
+          society_id: string
+          updated_at?: string
+        }
+        Update: {
+          bin_code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_maintenance?: string | null
+          latitude?: number | null
+          location_description?: string
+          longitude?: number | null
+          society_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_bins_society_id_fkey"
+            columns: ["society_id"]
+            isOneToOne: false
+            referencedRelation: "societies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      societies: {
+        Row: {
+          address: string
+          city: string
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          id: string
+          name: string
+          pincode: string
+          state: string
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          city: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          pincode: string
+          state: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          city?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          pincode?: string
+          state?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      waste_disposal_records: {
+        Row: {
+          bin_id: string
+          classification_result: string
+          confidence_score: number | null
+          created_at: string
+          household_id: string
+          id: string
+          image_url: string | null
+          points_awarded: number | null
+          timestamp: string
+          waste_category: string
+        }
+        Insert: {
+          bin_id: string
+          classification_result: string
+          confidence_score?: number | null
+          created_at?: string
+          household_id: string
+          id?: string
+          image_url?: string | null
+          points_awarded?: number | null
+          timestamp?: string
+          waste_category: string
+        }
+        Update: {
+          bin_id?: string
+          classification_result?: string
+          confidence_score?: number | null
+          created_at?: string
+          household_id?: string
+          id?: string
+          image_url?: string | null
+          points_awarded?: number | null
+          timestamp?: string
+          waste_category?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "waste_disposal_records_bin_id_fkey"
+            columns: ["bin_id"]
+            isOneToOne: false
+            referencedRelation: "smart_bins"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "waste_disposal_records_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_role: {
+        Args: { _user_id: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
-      [_ in never]: never
+      user_role: "resident" | "authority"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +393,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      user_role: ["resident", "authority"],
+    },
   },
 } as const

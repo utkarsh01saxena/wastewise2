@@ -1,10 +1,30 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Building2, Leaf, Recycle, Shield, Users, Zap } from "lucide-react";
+import { Building2, Leaf, Recycle, Shield, Users, Zap, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user && profile) {
+      // Redirect authenticated users to their appropriate dashboard
+      if (profile.role === 'resident') {
+        navigate('/resident');
+      } else if (profile.role === 'authority') {
+        navigate('/authority');
+      }
+    }
+  }, [user, profile, navigate]);
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
   const features = [
     {
       icon: Recycle,
@@ -30,6 +50,44 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-secondary/30 to-accent/20">
+      {/* Header */}
+      <header className="border-b border-border/40 backdrop-blur-sm bg-background/80 sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <Leaf className="h-8 w-8 text-primary" />
+            <span className="text-2xl font-bold text-foreground">WasteWise</span>
+          </div>
+          <div className="flex gap-4">
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground flex items-center">
+                  Welcome, {profile?.full_name || user.email}
+                </span>
+                <Button variant="outline" onClick={handleSignOut} className="gap-2">
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button variant="ghost" className="gap-2">
+                    <Users className="h-4 w-4" />
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button variant="outline" className="gap-2">
+                    <Shield className="h-4 w-4" />
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
+          </div>
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
@@ -48,18 +106,39 @@ const Index = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-            <Link to="/resident">
-              <Button size="lg" className="bg-eco-gradient hover:shadow-glow transition-all duration-300 min-w-48">
-                <Users className="w-5 h-5 mr-2" />
-                Resident Dashboard
-              </Button>
-            </Link>
-            <Link to="/authority">
-              <Button size="lg" variant="outline" className="min-w-48 border-primary hover:bg-primary/10">
-                <Shield className="w-5 h-5 mr-2" />
-                Authority Portal
-              </Button>
-            </Link>
+            {user ? (
+              // Show dashboard buttons for authenticated users
+              <>
+                <Link to="/resident">
+                  <Button size="lg" className="bg-eco-gradient hover:shadow-glow transition-all duration-300 min-w-48">
+                    <Users className="w-5 h-5 mr-2" />
+                    Resident Dashboard
+                  </Button>
+                </Link>
+                <Link to="/authority">
+                  <Button size="lg" variant="outline" className="min-w-48 border-primary hover:bg-primary/10">
+                    <Shield className="w-5 h-5 mr-2" />
+                    Authority Portal
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              // Show auth buttons for non-authenticated users
+              <>
+                <Link to="/auth">
+                  <Button size="lg" className="bg-eco-gradient hover:shadow-glow transition-all duration-300 min-w-48">
+                    <Users className="w-5 h-5 mr-2" />
+                    Get Started
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline" className="min-w-48 border-primary hover:bg-primary/10">
+                    <Shield className="w-5 h-5 mr-2" />
+                    Sign In
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Stats */}

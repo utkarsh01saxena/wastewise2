@@ -2,9 +2,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Award, Leaf, MapPin, Recycle, TrendingUp, Trophy } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Award, Leaf, LogOut, MapPin, Recycle, TrendingUp, Trophy } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const ResidentDashboard = () => {
+  const { signOut, profile } = useAuth();
   const complianceScore = 92;
   const totalPoints = 2847;
   const monthlyTarget = 3000;
@@ -28,11 +31,22 @@ const ResidentDashboard = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-secondary/50 p-6">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-eco-gradient bg-clip-text text-transparent mb-2">
-            WasteWise Dashboard
-          </h1>
-          <p className="text-muted-foreground">Track your waste segregation journey</p>
+        <div className="flex justify-between items-center mb-8">
+          <div className="flex-1 text-center">
+            <h1 className="text-4xl font-bold bg-eco-gradient bg-clip-text text-transparent mb-2">
+              WasteWise Dashboard
+            </h1>
+            <p className="text-muted-foreground">Track your waste segregation journey</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="text-sm text-muted-foreground">
+              Welcome, {profile?.full_name}
+            </span>
+            <Button variant="outline" onClick={signOut} className="gap-2">
+              <LogOut className="h-4 w-4" />
+              Sign Out
+            </Button>
+          </div>
         </div>
 
         {/* Stats Overview */}

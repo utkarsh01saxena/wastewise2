@@ -29,12 +29,12 @@ const Index = () => {
     {
       icon: Recycle,
       title: "Smart Waste Classification",
-      description: "AI-powered waste segregation with real-time feedback"
+      description: "AI-powered waste classification with real-time compliance detection"
     },
     {
       icon: Zap,
       title: "IoT Integration",
-      description: "Connected smart bins with automated sorting mechanisms"
+      description: "Connected smart bins with automated waste classification and real-time feedback"
     },
     {
       icon: Users,
@@ -99,8 +99,8 @@ const Index = () => {
               WasteWise
             </h1>
             <p className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-              Revolutionizing urban waste management through AI-powered segregation, 
-              IoT integration, and community engagement
+              Revolutionizing urban waste management through AI-powered smart bins with 
+              automated waste classification and real-time feedback and compliance reporting
             </p>
           </div>
 
@@ -167,7 +167,7 @@ const Index = () => {
               Smart Waste Management Features
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive ecosystem for sustainable waste segregation and monitoring
+              Comprehensive ecosystem for sustainable waste classification and monitoring
             </p>
           </div>
 
@@ -214,7 +214,7 @@ const Index = () => {
               <CardContent>
                 <p className="text-muted-foreground">
                   Physical smart bins with cameras, sensors, and AI-powered classification 
-                  automatically sort waste into dry, wet, and mixed categories.
+                  automatically classify waste into dry and wet waste categories.
                 </p>
               </CardContent>
             </Card>

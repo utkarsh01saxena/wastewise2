@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, BarChart3, Building2, CheckCircle, LogOut, TrendingDown, TrendingUp, Users, Zap } from "lucide-react";
+import { AlertCircle, BarChart3, Building2, CheckCircle, LogOut, Shield, TrendingDown, TrendingUp, Users, Zap } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 
 const AuthorityDashboard = () => {
@@ -43,6 +43,12 @@ const AuthorityDashboard = () => {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div className="flex-1 text-center">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Badge className="bg-primary text-primary-foreground text-sm px-4 py-2">
+                <Shield className="w-4 h-4 mr-2" />
+                Authority Dashboard
+              </Badge>
+            </div>
             <h1 className="text-4xl font-bold bg-eco-gradient bg-clip-text text-transparent mb-2">
               WasteWise Authority Portal
             </h1>

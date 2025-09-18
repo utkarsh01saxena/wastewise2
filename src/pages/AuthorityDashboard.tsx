@@ -3,11 +3,13 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { AlertCircle, BarChart3, Building2, CheckCircle, LogOut, Shield, TrendingDown, TrendingUp, Users, Zap, Wifi, WifiOff, Camera, Lightbulb, Cpu, Truck, Battery } from "lucide-react";
+import { AlertCircle, BarChart3, Building2, CheckCircle, LogOut, Shield, TrendingDown, TrendingUp, Users, Zap, Wifi, WifiOff, Camera, Lightbulb, Cpu, Truck, Battery, Eye, ArrowLeft } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 
 const AuthorityDashboard = () => {
   const { signOut, profile } = useAuth();
+  const [selectedSociety, setSelectedSociety] = useState<string | null>(null);
   const totalHouseholds = 1247;
   const activeUsers = 1089;
   const avgCompliance = 87;
@@ -20,6 +22,36 @@ const AuthorityDashboard = () => {
     { society: "City Heights", households: 150, compliance: 78, trend: "down" },
     { society: "Metro Plaza", households: 75, compliance: 72, trend: "down" },
   ];
+
+  const householdData = {
+    "Green Valley Apartments": [
+      { rfid: "RFID-GVA-001", flatNumber: "A-101", residents: "Sharma Family", compliance: 98, points: 1250, lastActivity: "2 hours ago" },
+      { rfid: "RFID-GVA-002", flatNumber: "A-102", residents: "Patel Family", compliance: 95, points: 1180, lastActivity: "4 hours ago" },
+      { rfid: "RFID-GVA-003", flatNumber: "A-103", residents: "Singh Family", compliance: 92, points: 1050, lastActivity: "1 day ago" },
+      { rfid: "RFID-GVA-004", flatNumber: "B-201", residents: "Kumar Family", compliance: 88, points: 920, lastActivity: "6 hours ago" },
+      { rfid: "RFID-GVA-005", flatNumber: "B-202", residents: "Gupta Family", compliance: 96, points: 1200, lastActivity: "3 hours ago" },
+    ],
+    "Sunrise Residency": [
+      { rfid: "RFID-SR-001", flatNumber: "101", residents: "Mehta Family", compliance: 93, points: 1150, lastActivity: "1 hour ago" },
+      { rfid: "RFID-SR-002", flatNumber: "102", residents: "Joshi Family", compliance: 89, points: 980, lastActivity: "5 hours ago" },
+      { rfid: "RFID-SR-003", flatNumber: "201", residents: "Agarwal Family", compliance: 91, points: 1080, lastActivity: "3 hours ago" },
+    ],
+    "Palm Grove": [
+      { rfid: "RFID-PG-001", flatNumber: "Villa-1", residents: "Reddy Family", compliance: 87, points: 890, lastActivity: "2 hours ago" },
+      { rfid: "RFID-PG-002", flatNumber: "Villa-2", residents: "Nair Family", compliance: 90, points: 1020, lastActivity: "4 hours ago" },
+      { rfid: "RFID-PG-003", flatNumber: "Villa-3", residents: "Iyer Family", compliance: 85, points: 850, lastActivity: "1 day ago" },
+    ],
+    "City Heights": [
+      { rfid: "RFID-CH-001", flatNumber: "T1-501", residents: "Das Family", compliance: 82, points: 720, lastActivity: "8 hours ago" },
+      { rfid: "RFID-CH-002", flatNumber: "T1-502", residents: "Roy Family", compliance: 78, points: 650, lastActivity: "12 hours ago" },
+      { rfid: "RFID-CH-003", flatNumber: "T2-301", residents: "Sen Family", compliance: 75, points: 580, lastActivity: "1 day ago" },
+    ],
+    "Metro Plaza": [
+      { rfid: "RFID-MP-001", flatNumber: "F-301", residents: "Bansal Family", compliance: 70, points: 520, lastActivity: "2 days ago" },
+      { rfid: "RFID-MP-002", flatNumber: "F-302", residents: "Mittal Family", compliance: 68, points: 480, lastActivity: "1 day ago" },
+      { rfid: "RFID-MP-003", flatNumber: "F-401", residents: "Goel Family", compliance: 74, points: 610, lastActivity: "6 hours ago" },
+    ],
+  };
 
   const alerts = [
     { type: "Low Compliance", message: "Metro Plaza below 75% compliance threshold", severity: "high" },
@@ -314,32 +346,109 @@ const AuthorityDashboard = () => {
           </TabsContent>
 
           <TabsContent value="societies" className="space-y-6">
-            <Card className="shadow-card">
-              <CardHeader>
-                <CardTitle>Society-wise Compliance</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {complianceData.map((society, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <div className="font-medium">{society.society}</div>
-                        <Badge variant="outline">{society.households} households</Badge>
-                        {society.trend === "up" && <TrendingUp className="w-4 h-4 text-success" />}
-                        {society.trend === "down" && <TrendingDown className="w-4 h-4 text-destructive" />}
-                        {society.trend === "stable" && <CheckCircle className="w-4 h-4 text-muted-foreground" />}
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1 max-w-xs">
-                          <Progress value={society.compliance} className="h-2" />
+            {!selectedSociety ? (
+              <Card className="shadow-card">
+                <CardHeader>
+                  <CardTitle>Society-wise Compliance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {complianceData.map((society, index) => (
+                    <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/50">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <div className="font-medium">{society.society}</div>
+                          <Badge variant="outline">{society.households} households</Badge>
+                          {society.trend === "up" && <TrendingUp className="w-4 h-4 text-success" />}
+                          {society.trend === "down" && <TrendingDown className="w-4 h-4 text-destructive" />}
+                          {society.trend === "stable" && <CheckCircle className="w-4 h-4 text-muted-foreground" />}
                         </div>
-                        <div className="text-sm font-medium">{society.compliance}%</div>
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 max-w-xs">
+                            <Progress value={society.compliance} className="h-2" />
+                          </div>
+                          <div className="text-sm font-medium">{society.compliance}%</div>
+                        </div>
                       </div>
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => setSelectedSociety(society.society)}
+                        className="ml-4"
+                      >
+                        <Eye className="w-4 h-4 mr-2" />
+                        View Households
+                      </Button>
                     </div>
+                  ))}
+                </CardContent>
+              </Card>
+            ) : (
+              <Card className="shadow-card">
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setSelectedSociety(null)}
+                    >
+                      <ArrowLeft className="w-4 h-4 mr-2" />
+                      Back
+                    </Button>
+                    <CardTitle>Household Compliance - {selectedSociety}</CardTitle>
                   </div>
-                ))}
-              </CardContent>
-            </Card>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid gap-4">
+                    {householdData[selectedSociety as keyof typeof householdData]?.map((household, index) => (
+                      <div key={index} className="flex items-center justify-between p-4 rounded-lg bg-muted/50 border">
+                        <div className="flex-1 space-y-2">
+                          <div className="flex items-center gap-4">
+                            <div className="font-medium text-lg">{household.flatNumber}</div>
+                            <Badge variant="outline" className="font-mono text-xs">
+                              {household.rfid}
+                            </Badge>
+                            <div className="text-sm text-muted-foreground">{household.residents}</div>
+                          </div>
+                          <div className="flex items-center gap-6">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium">Compliance:</span>
+                              <div className="flex items-center gap-2">
+                                <Progress value={household.compliance} className="w-20 h-2" />
+                                <span className={`text-sm font-bold ${
+                                  household.compliance >= 90 ? 'text-success' : 
+                                  household.compliance >= 75 ? 'text-warning' : 'text-destructive'
+                                }`}>
+                                  {household.compliance}%
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-medium">Points:</span>
+                              <Badge className="bg-primary text-primary-foreground">
+                                {household.points}
+                              </Badge>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              Last activity: {household.lastActivity}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center gap-2">
+                          <div className={`w-3 h-3 rounded-full ${
+                            household.compliance >= 90 ? 'bg-success' : 
+                            household.compliance >= 75 ? 'bg-warning' : 'bg-destructive'
+                          }`} />
+                          <span className="text-xs font-medium">
+                            {household.compliance >= 90 ? 'Excellent' : 
+                             household.compliance >= 75 ? 'Good' : 'Needs Improvement'}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="smartbins" className="space-y-6">
